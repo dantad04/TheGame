@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3 uid="uid://dsw8raqgacxsc"]
+
+[ext_resource type="Script" uid="uid://5g3ovjrtdvwb" path="res://player.gd" id="1_73bic"]
+[ext_resource type="PackedScene" uid="uid://pbmyh1qru7p" path="res://characters/happy_boo/happy_boo.tscn" id="2_bl5ih"]
+[ext_resource type="PackedScene" uid="uid://cphcr81upg72i" path="res://gun.tscn" id="3_bt0kc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_csncd"]
+size = Vector2(66, 38)
+
+[sub_resource type="FontFile" id="FontFile_i3pqv"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/30/0/ascent = 0.0
+cache/0/30/0/descent = 0.0
+cache/0/30/0/underline_position = 0.0
+cache/0/30/0/underline_thickness = 0.0
+cache/0/30/0/scale = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_hqtel"]
+font = SubResource("FontFile_i3pqv")
+font_size = 30
+font_color = Color(1, 0.52549, 1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfffa"]
+size = Vector2(84, 54)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a5sny"]
+bg_color = Color(0.623529, 0.866667, 0.317647, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i3pqv"]
+radius = 159.154
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_73bic")
+
+[node name="HappyBoo" parent="." instance=ExtResource("2_bl5ih")]
+unique_name_in_owner = true
+position = Vector2(-13, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_csncd")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Label" type="Label" parent="Camera2D"]
+unique_name_in_owner = true
+offset_left = -40.0
+offset_top = 33.0
+offset_bottom = 56.0
+text = "Coin Count:"
+label_settings = SubResource("LabelSettings_hqtel")
+
+[node name="Gun" parent="." instance=ExtResource("3_bt0kc")]
+position = Vector2(0, -40)
+
+[node name="HurtBox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_kfffa")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+z_index = 100
+offset_left = -83.0
+offset_top = -185.0
+offset_right = 87.0
+offset_bottom = -150.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_a5sny")
+value = 100.0
+show_percentage = false
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-10, -20)
+shape = SubResource("CircleShape2D_i3pqv")
+debug_color = Color(0.769902, 0.29573, 0.831609, 0.42)
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
